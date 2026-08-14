@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GapFinder | Intelligent Math Tutor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- RESET & LAYOUT --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #f8f9fa; font-family: 'Poppins', sans-serif; color: #333; line-height: 1.6; overflow-x: hidden; }
+        a { text-decoration: none; }
+
+        /* --- NAVBAR (Matches About Page) --- */
+        .navbar {
+            background: white; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 1000;
+        }
+        .brand { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: #162622; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .brand span { color: #00aeef; }
+        .nav-links { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px;
+        }
+        .nav-separator {
+            border-left: 1px solid #eee;
+            height: 20px;
+            margin: 0 5px; 
+        }
+        .btn-outline, .btn-login {
+            margin: 0 !important;
+        }
+        .nav-links a { 
+            color: #555; 
+            font-weight: 500; 
+            transition: color 0.3s;
+            display: inline-block; 
+            min-width: 80px; 
+            text-align: center;
+        }
+        .nav-links a:hover, .nav-links a.active { 
+            color: #00aeef; 
+            font-weight: 600; 
+        }
+        .btn-outline { border: 2px solid #00aeef; color: #00aeef !important; padding: 8px 20px; border-radius: 8px; font-weight: 600; transition: 0.3s; }
+        .btn-outline:hover { background: rgba(0, 174, 239, 0.1); }
+        .btn-login { background: #00aeef; color: white !important; padding: 10px 25px; border-radius: 8px; font-weight: 600; transition: background 0.3s; }
+        .btn-login:hover { background: #0095cc; box-shadow: 0 4px 10px rgba(0,174,239,0.3); }
+
+        /* --- HERO SECTION --- */
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            padding: 80px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 80px);
+        }
+
+        .hero-text h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4rem;
+            line-height: 1.1;
+            color: #162622;
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+        .hero-text h1 span { color: #00aeef; }
+        
+        .hero-text p {
+            font-size: 1.15rem; color: #666; margin-bottom: 40px; max-width: 500px;
+        }
+
+        .hero-buttons { display: flex; gap: 15px; }
+        .btn-primary-large {
+            background: #00aeef; color: white; padding: 15px 35px; border-radius: 10px;
+            font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; gap: 10px;
+            transition: 0.3s; border: none; cursor: pointer; box-shadow: 0 5px 15px rgba(0,174,239,0.3);
+        }
+        .btn-primary-large:hover { transform: translateY(-3px); background: #0095cc; }
+
+        /* --- HERO VISUAL (Floating UI Cards) --- */
+        .hero-visual { position: relative; height: 500px; }
+        
+        .floating-card {
+            background: white; border-radius: 15px; padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); position: absolute;
+            animation: float 6s ease-in-out infinite; border: 1px solid #f0f2f5;
+        }
+
+        .card-1 { top: 0; right: 0; width: 320px; animation-delay: 0s; z-index: 2; }
+        .card-2 { bottom: 50px; left: 0; width: 280px; animation-delay: 2s; z-index: 3; }
+        .card-3 { top: 150px; left: 50px; width: 200px; animation-delay: 1s; z-index: 1; opacity: 0.6; filter: blur(2px); }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Mock UI Elements inside cards */
+        .mock-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .mock-avatar { width: 45px; height: 45px; background: #eafaf1; color: #2ecc71; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; }
+        .mock-title { font-family: 'Montserrat'; font-weight: 700; color: #333; }
+        .mock-sub { font-size: 0.8rem; color: #888; }
+        
+        .mock-bar-bg { width: 100%; height: 8px; background: #eee; border-radius: 4px; margin-bottom: 15px; overflow: hidden;}
+        .mock-bar-fill { height: 100%; width: 75%; background: #2ecc71; border-radius: 4px;}
+        .mock-bar-fill.blue { background: #00aeef; width: 45%; }
+        
+        .mock-badge { display: flex; align-items: center; gap: 10px; padding: 10px; background: #fffbe6; border: 1px solid #ffeaa7; border-radius: 8px; margin-top: 10px; }
+        .mock-badge i { color: #f1c40f; font-size: 1.5rem; }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-container { grid-template-columns: 1fr; text-align: center; padding-top: 40px; }
+            .hero-text h1 { font-size: 3rem; }
+            .hero-text p { margin: 0 auto 30px; }
+            .hero-buttons { justify-content: center; }
+            .hero-visual { display: none; }
+            .nav-links { display: none; } 
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="brand">
+            <img src="QuERST-logo.png" style="width: 35px;" alt="Logo" onerror="this.style.display='none'">
+            Gap<span>Finder</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="active">Home</a> 
+            <a href="/about">About Us</a>
+            <div class="nav-separator"></div>
+            <!-- Updated routing links -->
+            <a href="/register" class="btn-outline">Sign Up</a>
+            <a href="/login" class="btn-login">Log In</a>
+        </div>
+    </nav>
+
+    <section class="hero-container">
+        
+        <div class="hero-text">
+            <h1>Stop Guessing.<br><span>Start Targeting.</span></h1>
+            <p>The intelligent diagnostic tool for Math teachers. Identify hidden learning gaps in minutes and generate a customized Bayesian learning path for every student.</p>
+            
+            <div class="hero-buttons">
+                <!-- Updated routing link -->
+                <a href="/register" class="btn-primary-large">
+                    Get Started Free <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            
+            <div class="floating-card card-1">
+                <div class="mock-header">
+                    <div class="mock-avatar" style="background: #e5f7fd; color: #00aeef;"><i class="fa-solid fa-brain"></i></div>
+                    <div>
+                        <div class="mock-title">Bayesian Mastery</div>
+                        <div class="mock-sub">Real-time skill estimation</div>
+                    </div>
+                </div>
+                <div style="font-size: 0.8rem; font-weight: 600; color: #555; display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Competency 2.1.13</span> <span style="color: #2ecc71;">Mastered</span>
+                </div>
+                <div class="mock-bar-bg"><div class="mock-bar-fill" style="width: 100%;"></div></div>
+                
+                <div style="font-size: 0.8rem; font-weight: 600; color: #555; display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Competency 4.2.04</span> <span style="color: #ff9f43;">Developing</span>
+                </div>
+                <div class="mock-bar-bg"><div class="mock-bar-fill blue"></div></div>
+            </div>
+
+            <div class="floating-card card-2">
+                <div class="mock-header">
+                    <div class="mock-avatar"><i class="fa-solid fa-medal"></i></div>
+                    <div>
+                        <div class="mock-title">Student Achievement</div>
+                        <div class="mock-sub">Level 3 Explorer</div>
+                    </div>
+                </div>
+                <div class="mock-badge" style="background: transparent; border: none; padding: 0; margin-top: 15px;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(241, 196, 15, 0.1); color: #f1c40f; display: flex; justify-content: center; align-items: center; font-size: 1.2rem;">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.9rem; font-family: 'Montserrat'; font-weight: 700; color: #333;">First Steps</div>
+                        <div style="font-size: 0.75rem; color: #666;">Diagnostic Complete</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="floating-card card-3">
+                <i class="fa-solid fa-chart-pie" style="font-size: 4rem; color: #00aeef; opacity: 0.2;"></i>
+                <div style="width: 80%; height: 10px; background: #eee; margin-top: 15px; border-radius: 5px;"></div>
+                <div style="width: 60%; height: 10px; background: #eee; margin-top: 10px; border-radius: 5px;"></div>
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>

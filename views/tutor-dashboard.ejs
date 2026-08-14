@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GapFinder | Tutor Workspace</title>
+    <!-- GapFinder Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- RESET & LAYOUT --- */
+        body { background-color: #f8f9fa; font-family: 'Poppins', sans-serif; color: #333; line-height: 1.6; overflow-x: hidden; }
+        a { text-decoration: none; }
+
+        /* --- NAVBAR --- */
+        .navbar-custom {
+            background: white; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 1000;
+        }
+        .brand { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: #162622; font-weight: 700; display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .brand span { color: #00aeef; }
+        .nav-links { display: flex; align-items: center; gap: 15px; }
+        .nav-separator { border-left: 1px solid #eee; height: 20px; margin: 0 5px; }
+        .nav-links a, .nav-links span { color: #555; font-weight: 500; transition: color 0.3s; text-decoration: none; }
+        .nav-links a:hover { color: #00aeef; }
+        .btn-outline { border: 2px solid #00aeef; color: #00aeef !important; padding: 6px 15px; border-radius: 8px; font-weight: 600; transition: 0.3s; font-size: 0.9rem;}
+        .btn-outline:hover { background: rgba(0, 174, 239, 0.1); }
+        
+        /* --- DASHBOARD UI --- */
+        .dashboard-container { margin-top: 50px; margin-bottom: 60px; }
+        .gf-card {
+            background: white; border-radius: 15px; padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #f0f2f5;
+            height: 100%; border-top: 4px solid #00aeef; display: flex; flex-direction: column;
+        }
+        .gf-card h5 { font-family: 'Montserrat', sans-serif; color: #162622; font-weight: 700; font-size: 1.2rem;}
+        .gf-card h6 { color: #00aeef; font-weight: 600; font-size: 0.9rem; margin-bottom: 15px;}
+        
+        .btn-primary-custom { background: #00aeef; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; border: none; box-shadow: 0 4px 10px rgba(0,174,239,0.2); transition: 0.3s; }
+        .btn-primary-custom:hover { transform: translateY(-2px); background: #0095cc; color: white; }
+        
+        .btn-action { padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; margin-right: 5px; border: none; transition: 0.2s;}
+        .btn-edit { background-color: #f1f3f5; color: #495057; }
+        .btn-edit:hover { background-color: #e9ecef; color: #212529; }
+        .btn-cancel { background-color: #ffe3e3; color: #c92a2a; }
+        .btn-cancel:hover { background-color: #ffc9c9; color: #a61e1e; }
+    </style>
+</head>
+<body>
+
+    <!-- Unified Navbar -->
+    <nav class="navbar-custom">
+        <a href="/tutor" class="brand">
+            <i class="fa-solid fa-graduation-cap" style="color: #00aeef;"></i>
+            Gap<span>Finder</span>
+        </a>
+        <div class="nav-links">
+            <span class="d-none d-md-inline"><i class="fa-solid fa-user-tie me-2"></i>Tutor Workspace</span>
+            <div class="nav-separator d-none d-md-block"></div>
+            <a href="/profile/security"><i class="fa-solid fa-key me-1"></i> Security</a>
+            <a href="/auth/logout" class="btn-outline"><i class="fa-solid fa-right-from-bracket me-1"></i> Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Workspace -->
+    <div class="container dashboard-container">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h4 style="font-family: 'Montserrat', sans-serif; font-weight: 800; color: #162622; margin: 0;">My Upcoming Sessions</h4>
+            <button class="btn-primary-custom"><i class="fa-solid fa-plus me-2"></i>Log New Session</button>
+        </div>
+
+        <div class="row g-4">
+            <!-- Intervention Card -->
+            <div class="col-md-6">
+                <div class="gf-card">
+                    <h5>Mathematics Intervention</h5>
+                    <h6><i class="fa-regular fa-calendar me-2"></i>August 18, 2026 - 1:00 PM</h6>
+                    <p class="text-muted">Focus on Bayesian Network modeling foundations for student competencies.</p>
+                    <div class="mt-auto pt-3">
+                        <button class="btn-action btn-edit"><i class="fa-solid fa-pen-to-square me-1"></i> Edit Notes</button>
+                        <button class="btn-action btn-cancel"><i class="fa-solid fa-xmark me-1"></i> Cancel Session</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Virtual Session Card -->
+            <div class="col-md-6">
+                <div class="gf-card">
+                    <h5>Inchican Elementary Virtual Session</h5>
+                    <h6><i class="fa-regular fa-calendar me-2"></i>August 19, 2026 - 9:00 AM</h6>
+                    <p class="text-muted">Team coordination with Ed Borromeo for module deployment.</p>
+                    <div class="mt-auto pt-3">
+                        <button class="btn-action btn-edit"><i class="fa-solid fa-pen-to-square me-1"></i> Edit Notes</button>
+                        <button class="btn-action btn-cancel"><i class="fa-solid fa-xmark me-1"></i> Cancel Session</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

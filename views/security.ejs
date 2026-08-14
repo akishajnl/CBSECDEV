@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GapFinder | Security Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Poppins', sans-serif; color: #333; line-height: 1.6; overflow-x: hidden; }
+        a { text-decoration: none; }
+        .navbar-custom { background: white; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 1000; }
+        .brand { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: #162622; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .brand span { color: #00aeef; }
+        .nav-links { display: flex; align-items: center; gap: 15px; }
+        .nav-separator { border-left: 1px solid #eee; height: 20px; margin: 0 5px; }
+        .nav-links a, .nav-links span { color: #555; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: #00aeef; }
+        .btn-outline { border: 2px solid #00aeef; color: #00aeef !important; padding: 6px 15px; border-radius: 8px; font-weight: 600; transition: 0.3s; font-size: 0.9rem;}
+        .btn-outline:hover { background: rgba(0, 174, 239, 0.1); }
+        
+        .security-container { margin-top: 50px; margin-bottom: 60px; }
+        .gf-card { background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #f0f2f5; height: 100%; border-top: 4px solid #00aeef; }
+        .gf-card h5 { font-family: 'Montserrat', sans-serif; color: #162622; font-weight: 700; border-bottom: 2px solid #f0f2f5; padding-bottom: 15px; margin-bottom: 20px;}
+        
+        .form-control { border-radius: 8px; padding: 12px 15px; border: 1px solid #dee2e6; font-size: 0.95rem; }
+        .form-control:focus { border-color: #00aeef; box-shadow: 0 0 0 0.25rem rgba(0, 174, 239, 0.25); }
+        .btn-primary-custom { background: #00aeef; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; border: none; width: 100%; transition: 0.3s; }
+        .btn-primary-custom:hover { background: #0095cc; color: white; transform: translateY(-2px); }
+        
+        .activity-item { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; }
+        .activity-icon { background: #f1f8ff; color: #00aeef; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;}
+        .activity-text h6 { margin: 0; font-weight: 600; color: #333; }
+        .activity-text p { margin: 0; font-size: 0.85rem; color: #6c757d; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar-custom">
+        <a href="/tutor" class="brand">
+            <i class="fa-solid fa-graduation-cap" style="color: #00aeef;"></i>
+            Gap<span>Finder</span>
+        </a>
+        <div class="nav-links">
+            <% 
+                let dashboardLink = '/tutor';
+                if (user.role === 'Administrator') dashboardLink = '/admin';
+                if (user.role === 'Role A') dashboardLink = '/coordinator';
+            %>
+            <a href="<%= dashboardLink %>"><i class="fa-solid fa-arrow-left me-1"></i> Back to Workspace</a>
+            <div class="nav-separator d-none d-md-block"></div>
+            <a href="/auth/logout" class="btn-outline"><i class="fa-solid fa-right-from-bracket me-1"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div class="container security-container">
+        <div class="mb-4">
+            <h4 style="font-family: 'Montserrat', sans-serif; font-weight: 800; color: #162622;">Security Center</h4>
+            <p class="text-muted">Manage your credentials and monitor account activity.</p>
+        </div>
+
+        <!-- Alerts for success or error messages -->
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-danger" role="alert"><i class="fa-solid fa-circle-exclamation me-2"></i><%= error %></div>
+        <% } %>
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="alert alert-success" role="alert"><i class="fa-solid fa-circle-check me-2"></i><%= success %></div>
+        <% } %>
+
+        <div class="row g-4">
+            <!-- Left Column: Password Change -->
+            <div class="col-md-7">
+                <div class="gf-card">
+                    <h5><i class="fa-solid fa-key me-2 text-primary"></i> Change Password</h5>
+                    <form action="/auth/update-password" method="POST">
+                        
+                        <!-- Current Password Field -->
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label fw-medium">Current Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="currentPassword">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- New Password Field -->
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label fw-medium">New Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="newPassword">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Confirm New Password Field -->
+                        <div class="mb-4">
+                            <label for="confirmNewPassword" class="form-label fw-medium">Confirm New Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" required>
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="confirmNewPassword">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- RESTORED: Submit Button -->
+                        <button type="submit" class="btn btn-primary-custom mt-2">
+                            Update Password
+                        </button>
+                    </form> <!-- RESTORED: Closing form tag -->
+                </div>
+            </div> <!-- RESTORED: Closing column tag -->
+                    
+            <!-- Right Column: Account Activity -->
+            <!-- Right Column: Account Activity -->
+            <div class="col-md-5">
+                <div class="gf-card">
+                    <h5><i class="fa-solid fa-shield-halved me-2 text-success"></i> Account Activity</h5>
+                    
+                    <!-- 1. Previous Successful Login -->
+                    <div class="activity-item mt-4">
+                        <div class="activity-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
+                        <div class="activity-text">
+                            <h6>Previous Successful Login</h6>
+                            <p><%= typeof lastSuccess !== 'undefined' && lastSuccess ? new Date(lastSuccess).toLocaleString() : 'This is your first login.' %></p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Last Unsuccessful Login -->
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: #fff0f0; color: #dc3545;"><i class="fa-solid fa-circle-xmark"></i></div>
+                        <div class="activity-text">
+                            <h6>Last Unsuccessful Login</h6>
+                            <p class="mb-0"><%= typeof lastFail !== 'undefined' && lastFail ? new Date(lastFail).toLocaleString() : 'No previous failed attempts.' %></p>
+                            
+                            <!-- ADDED: Display the count if there was more than 0 failures -->
+                            <% if (typeof previousFailures !== 'undefined' && previousFailures > 0) { %>
+                                <span class="badge bg-danger mt-1">
+                                    <%= previousFailures %> failed attempt<%= previousFailures > 1 ? 's' : '' %> prior to login
+                                </span>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- 3. Last Password Change -->
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                        <div class="activity-text">
+                            <h6>Last Password Change</h6>
+                            <p><%= user.lastPasswordChange ? new Date(user.lastPasswordChange).toLocaleString() : 'Never' %></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Security Warning Note -->
+                    <div class="mt-4 p-3 bg-light rounded border">
+                        <p class="mb-0" style="font-size: 0.85rem; color: #555;">
+                            <strong>Note:</strong> If you notice any suspicious activity or timestamps in your logs, please change your password immediately or contact your Administrator.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESTORED: Password Visibility Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButtons = document.querySelectorAll('.toggle-password');
+            
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const passwordInput = document.getElementById(targetId);
+                    const icon = this.querySelector('i');
+                    
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash'); 
+                    } else {
+                        passwordInput.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye'); 
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
