@@ -71,51 +71,27 @@
 
         <div class="row g-4">
             <!-- Left Column: Password Change -->
+            <!-- Left Column: Password Management -->
             <div class="col-md-7">
                 <div class="gf-card">
-                    <h5><i class="fa-solid fa-key me-2 text-primary"></i> Change Password</h5>
-                    <form action="/auth/update-password" method="POST">
-                        
-                        <!-- Current Password Field -->
-                        <div class="mb-3">
-                            <label for="currentPassword" class="form-label fw-medium">Current Password</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
-                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="currentPassword">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
+                    <h5><i class="fa-solid fa-key me-2" style="color: #00aeef;"></i> Change Password</h5>
+                    <p class="text-muted mb-4" style="font-size: 0.9rem;">
+                        As part of our strict security compliance policy, you must verify your identity using your predefined security question before you can modify your credentials.
+                    </p>
+                    
+                    <!-- Decorative Icon -->
+                    <div class="text-center my-5">
+                        <i class="fa-solid fa-shield-halved opacity-25" style="font-size: 5rem; color: #00aeef;"></i>
+                    </div>
 
-                        <!-- New Password Field -->
-                        <div class="mb-3">
-                            <label for="newPassword" class="form-label fw-medium">New Password</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control" id="newPassword" name="newPassword" required>
-                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="newPassword">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Confirm New Password Field -->
-                        <div class="mb-4">
-                            <label for="confirmNewPassword" class="form-label fw-medium">Confirm New Password</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" required>
-                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="confirmNewPassword">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- RESTORED: Submit Button -->
-                        <button type="submit" class="btn btn-primary-custom mt-2">
-                            Update Password
-                        </button>
-                    </form> <!-- RESTORED: Closing form tag -->
+                    <!-- CTA Button pointing to the Verification Prompt -->
+                    <div class="d-grid gap-2 mt-4">
+                        <a href="/profile/security/verify-prompt" class="btn fw-medium py-2 text-white" style="background-color: #00aeef; border: none; transition: 0.3s;" onmouseover="this.style.backgroundColor='#0095cc'" onmouseout="this.style.backgroundColor='#00aeef'">
+                            <i class="fa-solid fa-lock me-2"></i> Verify Identity to Change Password
+                        </a>
+                    </div>
                 </div>
-            </div> <!-- RESTORED: Closing column tag -->
+            </div>
                     
             <!-- Right Column: Account Activity -->
             <!-- Right Column: Account Activity -->

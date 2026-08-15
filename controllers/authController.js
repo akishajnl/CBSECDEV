@@ -8,19 +8,30 @@ const authController = {
         try {
             const { username, password, confirmPassword, securityQuestion, securityAnswer } = req.body;
 
+            // --- Validate Data Range (Maximum & Minimum Limits) ---
+            if (username.length < 3 || username.length > 30) {
+                return res.render('register', { error: "Username must be between 3 and 30 characters." });
+            }
+            if (securityAnswer.length > 100) {
+                return res.render('register', { error: "Security answer exceeds maximum limit of 100 characters." });
+            }
+            if (password.length > 64) {
+                return res.render('register', { error: "Password exceeds maximum limit of 64 characters." });
+            }
+
             // 1. Basic Validation: Ensure passwords match
             if (password !== confirmPassword) {
                 return res.render('register', { error: "Passwords do not match." });
             }
 
             // Security Control 2.1.5 & 2.1.6: Enforce complexity and length requirements established by policy or regulation
-            // Policy: Minimum 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.
-            const complexityRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            // Policy: Minimum 8, Maximum 64 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.
+            const complexityRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/;
             
             if (!complexityRegex.test(password)) {
                 // Security Control 2.3.1: All validation failures should result in input rejection. Sanitizing should not be used
                 return res.render('register', { 
-                    error: "Password does not meet complexity requirements. It must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character." 
+                    error: "Password does not meet complexity requirements. It must be 8-64 characters long and include an uppercase letter, a lowercase letter, a number, and a special character." 
                 });
             }
 
@@ -52,7 +63,7 @@ const authController = {
             const saltRounds = 12; 
             const passwordHash = await bcrypt.hash(password, saltRounds);
             
-            // Hash the security answer as well
+            // Hash the security answer as well (Standard exception to sanitization rule for UX)
             const securityAnswerHash = await bcrypt.hash(securityAnswer.toLowerCase().trim(), saltRounds);
 
             // 4. Create the new user object (Defaults to Role B)
@@ -226,8 +237,14 @@ const authController = {
                 return res.render('reset-password', { username, securityQuestion: user.securityQuestion, error: "Passwords do not match." });
             }
 
-            // 2. Strict Complexity Validation
-            const complexityRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            // --- Maximum Range Check ---
+            if (newPassword.length > 64) {
+                const user = await User.findOne({ username });
+                return res.render('reset-password', { username, securityQuestion: user.securityQuestion, error: "Password exceeds maximum limit of 64 characters." });
+            }
+
+            // 2. Strict Complexity Validation (Max 64 chars)
+            const complexityRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/;
             if (!complexityRegex.test(newPassword)) {
                 const user = await User.findOne({ username });
                 return res.render('reset-password', { username, securityQuestion: user.securityQuestion, error: "New password does not meet complexity requirements." });
@@ -346,8 +363,13 @@ const authController = {
                 return res.render('security-update-form', { user, error: "New passwords do not match.", success: null });
             }
 
-            // 3. Enforce complexity requirements
-            const complexityRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            // --- Maximum Range Check ---
+            if (newPassword.length > 64) {
+                return res.render('security-update-form', { user, error: "Password exceeds maximum limit of 64 characters.", success: null });
+            }
+
+            // 3. Enforce complexity requirements (Max 64 chars)
+            const complexityRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/;
             if (!complexityRegex.test(newPassword)) {
                 return res.render('security-update-form', { user, error: "New password does not meet complexity requirements.", success: null });
             }
